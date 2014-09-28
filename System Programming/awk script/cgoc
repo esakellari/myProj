@@ -1,0 +1,701 @@
+#!/bin/bash
+
+#kratame ton trexonta katalogo 
+curdir=`pwd`
+
+#elegxoume an sti deyteri parametro, yparxei "-" dld prokeitai gia evros eksaminwn 
+i=`expr index $2 "-"`
+
+#an prokeitai gia evros eksaminwn
+if [ $i -gt 0 ] 
+then
+	#pairnw to mikos tou prwtou eksaminou pou dinetai
+	strlen=`expr length "$2"`
+
+	strlen=$(($strlen-$i))
+
+	#vazw stis metavlites var0 kai var1 tto 1o kai 2o eksamino antistoixa
+	var0=`expr substr $2 1 $(($i-1))`
+
+	var1=`expr substr $2 $(($i+1)) $strlen`
+
+	#krataw to mikos mono tou prwtou eksaminou
+	year0=`expr length "$var0"`
+
+	#var2 = to eksamino apo to opoio ksekiname 
+	var2=`expr substr $var0 1 $(($year0-2))`
+
+	#apomonwnw ti xronia tou 1ou eksaminou
+	year0=`expr substr $var0 $(($year0-1)) 2`
+
+	#krataw to mikos tou 2ou eksaminou
+	year1=`expr length "$var1"`
+
+	#var3 = to eksamino mexri to opoio ypologizoume
+	var3=`expr substr $var1 1 $(($year1-2))`
+
+	#apomonwnw ti xronia tou 2ou eksaminou 
+	year1=`expr substr $var1 $(($year1-1)) 2`
+
+	#koitaw na dw an sto prwto 6mino to prwto stoixeio tis
+	#xronias einai 0 
+	first1=`expr substr $year0 1 1`
+	if [ $first1 == "0" ] 
+		then
+		second1=`expr substr $year0 2 1`
+	else
+		second1=`expr substr $year0 1 2`
+	fi
+
+	#to idio kai gia to 2o eksamino
+	first2=`expr substr $year1 1 1`
+	if [ $first2 == "0" ] 
+		then
+		second2=`expr substr $year1 2 1` 
+	else
+		second2=`expr substr $year1 1 2`
+	fi
+
+#parakatw diaxwrizontai oi periptwseis spring -spring, fall-fall
+#spring-fall, fall-spring. Aytos o diaxwrismos ginetai giati analoga
+#me to poio dinetai san prwto kai teleytaio eksamino, prepei na 
+#xeiristw analoga tous fakelous. Gia paradeigma an dinetai fall00-fall03
+#prepei na epeksergastw tous fakelous fall00,spring01,fall01,spring02,fall02,
+#spring03, fall03.Stis alles periptwseis to evros allazei.Gia kathe enan
+#apo tous fakelous yparxei mia epanalipsi i opoia einai idia , kai i opoia
+#kalei to awk script.
+
+	#spring-spring
+	if [ $var2 == "spring" ]&&[ $var3 == "spring" ] 
+	then
+	for((i=$second1;i<=$second2;i++))
+	do
+		#an i dekaetia einai mikroteri tou 10
+		if [ $i -lt 10 ]
+		then
+
+			#mpainw mesa stous fakelous , kai gia ola ta mathimata kalw to awk sxript
+			for file in "spring0$i"
+			do
+				cd $1
+				cd $file
+				echo $file
+				
+				for file in *
+				do
+					echo $file
+					cd $file
+
+					for file1 in '*.input'
+					do
+						echo $file1
+						awk -f $curdir"/"advice  $file1
+						for file in 'best'
+							do
+								#elegxw an yparxei to arxeio best, an dld oi vathmoi ypologizontai gia 1i fora
+								if [ -f 'best' ]
+								then
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+					done
+					cd ..
+				done
+				cd $curdir
+			done	
+			for file in "fall0$i"
+			do 
+				cd $1
+				cd $file
+				echo $file
+				 for file in *
+                                do
+                                        echo $file
+                                        cd $file
+
+                                        for file1 in '*.input'
+                                        do
+                                                echo $file1
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								echo file exists
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+							
+                                        done    
+                                        cd ..   
+                                done
+
+				cd $curdir
+			done
+		else
+			#an i dekaetia einai > 10 pairnoume ta eksamina spring me ti seira ena ena 
+			for file in "spring$i"
+			do 
+				
+				cd $1
+				cd $file
+				
+				 for file in *
+                                do
+                                        cd $file
+
+                                        for file1 in '*.input'
+                                        do
+                                               
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                        
+					     done    
+                                        cd ..   
+                                done
+
+				cd $curdir
+			done	
+			if [ $i -lt $second2 ] 
+			then
+			for file in "fall$i"
+			do
+				cd $1
+				cd $file
+			
+				 for file in *
+                                do
+                                       cd $file
+
+                                        for file1 in '*.input'
+                                        do
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                        done    
+                                        cd ..   
+                                done
+
+				cd $curdir
+			done 
+			fi
+		fi
+	done
+
+	#i idia texniki akoloutheitai kai gia tis alles periptwseis
+	#spring-fall
+	elif [ $var2 == "spring" ]&&[ $var3 == "fall" ] 
+	then 
+		for((i=$second1;i<=$second2;i++))
+		do
+			if [ $i -lt 10 ]
+			then
+				for file in "fall0$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                	do
+                                        	
+                                        	cd $file
+
+                                        	for file1 in '*.input'
+                                        	do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                        	done    
+                                        	cd ..   
+                                	done
+					cd $curdir
+				done
+				for file in "spring0$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                        do
+                                              
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir
+				done
+			else
+				for file in "fall$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                        do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir
+				done
+				for file in "spring$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                        do
+                                              
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                               
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir
+				done
+			fi
+		done
+	
+	#fall-fall
+	elif [ $var2 == "fall" ]&&[ $var3 == "fall" ] 
+	then 		
+	for((i=$second1;i<=$second2;i++))
+	do
+		if [ $i -lt 10 ]
+		then
+			for file in "fall0$i"
+			do
+				cd $1
+				cd $file
+				
+				for file in *
+                                        do
+                                              
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+				cd $curdir
+			done 
+			if [ $i -gt $second1 ]
+			then
+				for file in "spring0$i"
+				do
+					cd $1
+					cd $file 
+					
+					for file in *
+                                        do
+                                               
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                             
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir
+				done
+			fi
+		else
+			for file in "fall$i"
+			do
+				cd $1			
+			
+				cd $file
+				for file in *
+                                        do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+				cd $curdir
+			done
+			for file in "spring$i"
+			do
+				cd $1
+			
+				cd $file
+				for file in *
+                                        do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                              
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+                                                done
+                                                cd ..
+                                        done
+
+				cd $curdir
+			done
+		fi
+	done
+
+	#fall-spring
+	elif [ $var2 == "fall" ]&&[ $var3 == "spring" ] 
+	then
+		for((i=$second1;i<=$second2;i++))
+		do
+			if [ $i -lt 10 ]
+			then
+				for file in "fall0$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                        do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                               
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+							
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir 
+				done
+				if [ $i -gt $second1 ]
+				then
+					for file in "spring0$i"
+					do
+						cd $1
+						cd $file
+					
+						for file in *
+                                        	do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                               
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+							
+                                                done
+                                                cd ..
+                                        	done
+
+					cd $curdir
+				done
+				fi
+			else
+				for file in "spring$i"
+				do
+					cd $1
+					cd $file
+					
+					for file in *
+                                        do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+							
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+
+							
+                                                done
+                                                cd ..
+                                        done
+
+					cd $curdir
+				done
+				if [ $i -lt $second2 ]
+				then
+					for file in "fall$i"
+					do
+						cd $1
+						cd $file
+					
+						for file in *
+                                        	do
+                                                
+                                                cd $file
+
+                                                for file1 in '*.input'
+                                                do
+                                                
+                                                awk -f $curdir"/"advice  $file1
+							for file in 'best'
+							do
+								if [ -f 'best' ]
+								then
+								
+								for student in $(awk  '{print $1}' <$file)
+								do
+									echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+								done
+								rm $file
+								fi
+							done
+		
+							
+                                                done
+                                                cd ..
+                                        	done
+
+					cd $curdir
+					done
+				fi
+			fi	
+		done 
+		
+	fi
+
+
+else
+
+#an dinetai mono ena eksamino gia epeksergiasia 
+cd $1
+cd $2
+
+	for file in *
+	do
+		
+		cd $file
+
+		for file1 in '*.input'
+		do
+			
+			awk -f $curdir"/"advice $file1
+			
+			for file in 'best'
+			do
+				if [ -f 'best' ]
+				then
+					
+					for student in $(awk  '{print $1}' <$file)
+					do
+						
+						echo "you are the best"|mailx -s "you are the best" $student@di.uoa.gr
+
+					done
+					rm $file
+				fi
+			done
+  
+		done
+
+		cd ..
+	done
+fi
+
+

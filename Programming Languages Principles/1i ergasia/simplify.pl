@@ -1,0 +1,154 @@
+%-SAKELLARI_ELISAVET
+%-1115200600152
+
+
+simplify([],[]).
+simplify([X|L],M):-append([],[X],M2),
+	help(L,X,M2,M).
+
+
+help([],_,M,M).
+help([X|L],X,M,R):-!,help(L,X,M,R).
+
+help([Y|L],_,M,R):-
+	append(M,[Y],M1),
+	help(L,Y,M1,R).
+%----------------------------------------------------
+two_diagonal(L):-
+	length(L,Length),
+	flatten(L,L1),
+	calc(0,[],Nl,Length),
+	calc2(1,[],Nl2,Length),
+	append(Nl,Nl2,NL),
+	C is 0,
+	help_diag2(L1,NL,C).
+
+help_diag2([],_,_).
+help_diag2([_|Rest],NL,C):-
+	member(C,NL),!,
+	C1 is C+1,
+	help_diag2(Rest,NL,C1).
+
+help_diag2([X|Rest],NL,C):-
+	X=:=0,
+	C1 is C+1,
+	help_diag2(Rest,NL,C1).
+
+calc2(L1,L,L,Length):-L1=:=Length+1,!.
+calc2(C,L,Nl,Length):-
+	C=<Length,
+	S is (Length-1)*C,
+	C1 is C+1,
+	append(L,[S],N2),
+	calc2(C1,N2,Nl,Length).
+
+calc(C,L,L,Length):-C=:=Length,!.
+calc(C,L,Nl,Length):-
+	C<Length,
+	S is (Length+1)*C,
+	C1 is C+1,
+	append(L,[S],N2),
+	calc(C1,N2,Nl,Length).
+
+
+%---------------------------------------------------
+
+is_tree(L):-
+	flat_nod(L,[],Nl),
+	quicksort(Nl,Sort),
+	simplify(Sort,Nl2),
+	length(L,Edge_Len),
+	length(Nl2,Len),
+	Edge_Len =:= Len-1.
+
+
+flat_nod([],Fin,Fin).
+flat_nod([(X,Y)|Rest],Init,Fin):-
+	append(Init,[X],F1),
+	append(F1,[Y],F2),
+	flat_nod(Rest,F2,Fin).
+
+quicksort([],[]).
+quicksort([X|T],Sort):-
+	split(X,T,Sm,Bi),
+	quicksort(Sm,SortSm),
+	quicksort(Bi,SortBi),
+	append(SortSm,[X|SortBi],Sort).
+
+
+split(X,[],[],[]).
+split(X,[Y|T],[Y|Sm],Bi):-
+	X>=Y,!,
+	split(X,T,Sm,Bi).
+split(X,[Y|T],Sm,[Y|Bi]):-
+	split(X,T,Sm,Bi).
+
+path(X,Y,Tree,P):-
+	path1(X,[Y],Tree,P).
+path1(A,[A|P1],_,[A|P1]).
+path1(A,[Y|P1],Tree,P):-
+	adjacent(X,Y,Tree),
+	not_member(X,P1),
+	path1(A,[X,Y|P1],Tree,P).
+
+not_member(_,[]):-!.
+not_member(X,[X|_]):-!,1=2.
+not_member(X,[_|L]):-not_member(X,L).
+
+
+adjacent(X,Y,Tree):-
+	member((X,Y),Tree);
+	member((Y,X),Tree).
+
+%-----------------------------------------------
+
+is_basis(L,M,N):-
+	make_list(M,N,0,[],List),
+	examine(List,L,L).
+
+examine([],_,_).
+examine([X|List],L,S):-
+	examine_help(X,L,S),
+	examine(List,L,S).
+
+examine_help(_,[],_):-
+	1=2.
+examine_help(X,[Y|L],S):-
+	Res is X-Y,
+	member(Res,S).
+
+examine_help(X,[Y|L],S):-
+	Res is X-Y,
+	not_member(Res,S),
+	examine_help(X,L,S).
+
+
+
+make_list(M,N,C,List,L2):-
+	M+C =:= N,
+	append(List,[N],L2).
+
+make_list(M,N,C,List,L1):-
+	M+C<N,
+	New is M+C,
+	append(List,[New],L2),
+	C2 is C +1,
+	make_list(M,N,C2,L2,L1).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

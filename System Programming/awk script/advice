@@ -1,0 +1,110 @@
+#!/bin/awk/ -v -f
+
+BEGIN { i=0; 
+	j=0; 
+	mo=0; 
+	s=0; 
+	max=0;
+	var=substr(ARGV[1],1,4);
+	
+	final=sprintf("%s.final", var);
+
+	#elegxw an yparxei idi to .final		
+
+	if ((getline dummy < final ) >= 0)
+  	{
+		ret1=1;
+		#close(final);
+	}
+	
+	stat=sprintf("%s.stat",var);
+}
+
+#prosthetw tin stili Final
+/User/ { $7 = "Final" }
+
+#oses grammes einai sxolia tis prosthetw aytousies sto arxeio .final
+/#/ { print $0 > final }
+
+#oses grammes einai stoixeia me vathmous foithtwn , kanw tis prakseis
+/std/{
+	if(NF>6)
+	{
+		NF=6;
+	}
+	
+	$7 = 0.3*$4 + 0.3*$5 + 0.4*$6
+
+	#dimiourgw ton pinaka me tous aristous
+	#arxika to max einai 0. Molis vrethei o prwtos foithths me bathmo final > 0 mpainei ston pinaka
+	#kai to max ginetai iso me to vathmo ayto, pou mexri ekeini ti stigmi einai megistos
+	#oso vriskontai foithtes me vathmo = max mpainoun ston pinaka
+	#an vrethei foithths me vathmo > max tote o pinakas dimiourgeitai apo tin arxi me to neo megisto
+	#vathmo san kritirio
+	
+	if($7>max)
+	{
+		t=0;
+		array[t]=$1;
+		t++;
+		max=$7;
+	}
+
+	else if($7==max)
+	{
+		array[t]=$1;
+		t++;
+	}
+
+	#elegxw posoi foithtes perasan to mathima
+	{ if(($7)>=50)
+		{
+			j++
+		}
+	}
+
+	print $0 >> final; 
+
+	#counter twn foithtwn synolika pou piran to mathima
+	i++ 
+
+	#athroisma olwn twn telikwn vathmwn olwn twn foithtwn
+	mo=mo+$7
+
+	#oloi oi telikoi vathmoi kratiountai se enan pinaka gia ton ypologismo tis apoklisis	
+	finals[i]=$7;
+       
+}
+
+END { 	
+	mo = mo/i;
+	#ypologismos tis apoklisis
+	for(m=1;m<=i;m++)
+	{
+		s =s+(finals[m]-mo)^2
+	}
+
+	s=s/i; 
+	s=sqrt(s); 
+	#s=s/10;
+
+	printf("%d Students have taken the course\n",i)> stat;
+	printf("%d Students were successful in  the course\n",j) >> stat; 
+	printf("%.1f per cent have failed\n",100*(i-j)/i)>> stat;
+	printf("Medium term of the course is %.1f\n", mo)>> stat;
+	printf("Variance is %.1f\n", s) >> stat;
+	
+	#dimiourgia arxeiou me aristous tin prwti fora twn ypologismwn
+	if(ret1!=1)
+	{					
+		for(m=0; m<t;m++)
+		{
+			if(m==0)
+			printf("%s\n", array[m])> "best";
+			else 
+			printf("%s\n", array[m])>> "best";
+		}
+	}
+
+	 
+    }

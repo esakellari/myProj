@@ -1,0 +1,21 @@
+ONOMA: SAKELLARI ELISSAVET
+AM:  1115200600152
+---------------------------------------------------
+
+To programma apoteleitai synolika apo ena bash script kai ena awk script. 
+To bash script xeirizetai thn diepafi tou programmatos pairnontas san orisma to apolyto h sxetiko monopati tou fakelou GRADES ston opoio prepei na ypolo
+gisei tous vathmous gia kathe eksamino pou periexetai. 
+To awk script kanei olous tous ypologismous sxetika me ta .input arxeia dhladh ypologizei tous telikous vathmous olwn twn foithtwn, ton arithmo twn foith
+twn pou phran to mathima,ton arithmo aytwn pou perasan to mathima, to pososto apotyxias, ton meso oro tis vathmologias, kai tin apoklisi apo ton meso oro. 
+Episis dimiourgei ta arxeia .final kai .stat eite yparxoun eite den yparxoun. Dhladh se periptwsi pou yparxoun hdh ayta ta arxeia kai theloume na epanaypologisoume tous vathmous, tote dimiourgountai ta nea panw apo ta palia, alla de stelnetai mail stous aristous.
+Gia ti diaxeirisi kai tin apostoli mail stous aristous, aytoi kata ton ypologismo twn telikwn kratiountai se enan pinaka kai sto telos dimiourgeitai ena arxeio me onoma "best" to opoio periexei ta std twn aristwn. Sti synexeia to bash script elegxei an exei dimiourgithei ayto to arxeio mesa ston fakelo tou mathimatos, kai an exei dimiourgithei, diavazei ta std pou exoun katagrafei se ayto, kai stelnei ta mail stous foithtes. Sti synexeia diagrafei to arxeio, etsi wste se kapoia epomeni ektelesi tou programmatos, pou omws de tha ypologizontai gia prwti fora oi vathmoi,na mi staloun ksana mails.
+
+To bash script dexetai san orisma enan fakelo eksaminou i ena evros fakelwn eksaminwn pros epeksergasia. 
+Stin periptwsi enos fakelou, to programma metavainei ston fakelo GRADES kai apo ekei ston fakelo pou dinetai kai sti synexeia kalei to awk script gia olous tous fakelwn mathimatwn pou vriskontai mesa se ayto. 
+Stin periptwsi enos evrous mathimatwn, arxika me tin voitheia tis expr eksetazei an sti 2i parametro pou dothike yparxei "-" gia na diakrinoume oti prokeitai gia ena evros eksaminwn. Sti synexeia vazei se dyo metavlites to prwto kai teleytaio eksamino pou tha epeksergatsei,  kai vazei episis se metavlites tis xronies twn eksaminwn pou dohtikan gia na kserei se poio evros tha kinithei. Sti synexeia diaxwrizontai 4 periptwseis: 
+																spring-spring
+																spring-fall
+																fall-fall
+																fall-spring
+giati analoga me to poio eksamino dinetai, earino i xeimerino, prepei na xeiristei diaforetika tous fakelous. Telos gia tous fakelous pou prepei na eksetasoume kaleitai kathe fora to awk script gia ton ypologismo twn final kai stat. 
+To programma dimiourgithike kai dokimastike se Linux.

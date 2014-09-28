@@ -1,0 +1,142 @@
+#include <naxos.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+using namespace naxos;
+
+//NsIntVarArray find_cost
+
+NsInt find_max(NsDeque<NsInt> main_edges){
+	
+	NsInt c = 0;
+
+	for(unsigned i = 0; i < main_edges.size(); ++i){
+		if(c < 	main_edges[i]){
+			c = main_edges[i];
+		}	
+	}
+	return c;
+}
+
+int main (int argc, char *argv[])
+{
+    try  {
+
+	//  Checking input arguments.
+
+	if ( argc != 3  &&  argc != 4 )   {
+
+		cerr << "Correct syntax is:\t" << argv[0]
+			<< " <nodes_number> <density> [<seed>]\n";
+		return  1;
+	}
+
+	//  Passing the number of nodes.
+	int        N = atoi(argv[1]);
+
+	//  Passing the density.
+	int  density = atoi(argv[2]);
+
+	//  Setting the seed.
+	if ( argc  ==  4 )
+		srand( atoi(argv[3]) );
+
+	//  Creating for each node `i' the array `graph_edge[i-1]', which
+	//   contains the numbers (`j') of the nodes connected to `i'.
+
+	NsDeque< NsDeque<NsInt> >  graph_edge;
+	
+	for (int i=1;  i <= N;  ++i)    {
+			graph_edge.push_back(NsDeque<NsInt>());
+
+			for (int j=i+1;  j <= N;  ++j)    {
+				if ( 100 * (rand()/(RAND_MAX+1.0))  <=  density )
+					graph_edge[ i-1 ].push_back( j );
+			}
+	}
+
+
+	//  Printing the graph representation.
+
+	/*	bool  firstEdge = true;
+
+	cout << "G = [";
+
+	for (int i=1;  i <= N;  ++i)    {
+
+		for (unsigned j=0;  j < graph_edge[i-1].size();  ++j)    {
+
+			if ( firstEdge )
+				firstEdge  =  false;
+			else
+				cout << ", ";
+
+			cout << i << " - " << graph_edge[i-1][j];
+		}
+	}
+
+	cout << "]\n";
+
+	*/
+
+	/**   	ADD YOUR CODE HERE 
+	 	SAKELLARI ELISAVET 
+	**/
+
+	NsProblemManager pm;
+	NsIntVarArray main_edges;
+
+	//kathe korifi exei ena xrwma
+	for(int i = 1; i <= N; ++i)
+		main_edges.push_back(NsIntVar(pm, 1, N));
+
+	for(int i =1; i <=N; ++i){
+		for(unsigned j = 0; j < graph_edge[i-1].size(); ++j){
+			
+			//kathe komvos na exei diaforetiko xrwma apo tis geitonikes tou
+			int neig = graph_edge[i-1][j]-1;	
+
+			pm.add(main_edges[i-1]!= main_edges[neig]);
+		}
+	}
+
+	pm.addGoal(new NsgLabeling(main_edges));
+
+	pm.minimize(NsSum(main_edges));	
+
+	NsInt Cost;
+	NsDeque<NsDeque<NsInt> > result;
+	
+	while (pm.nextSolution() != false){
+
+		NsDeque<NsInt> result2;
+	
+		for(unsigned i = 0; i < main_edges.size(); ++i)
+			result2.push_back(main_edges[i].value());		
+
+		result.push_back(result2);
+	}
+
+	unsigned element = result.size()-1;
+				
+	cout<<"Col = [ ";
+	for(unsigned i = 0; i < result[element].size(); ++i){
+		if(i == result[element].size()-1)
+			cout <<result[element][i]<<" ";
+		else
+			cout <<result[element][i]<<", ";
+		}cout<<"]"<<endl;
+
+		Cost = find_max(result[element]);
+		cout<<"C = "<< Cost<<endl;
+
+    }  catch (exception& exc)  {
+
+	cerr << exc.what() << "\n";
+
+    }  catch (...)  {
+
+	cerr << "Unknown exception" << "\n";
+    }
+}
