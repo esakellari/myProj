@@ -1,0 +1,25 @@
+The Pairs_Program has two versions, one implemented in Java and one in C++. 
+It was an exercise for the Modern Programming Methods Master's course. 
+
+The program takes as input lines of pairs of numbers in the form X|Y where X and Y are integers.
+The output gives again all the lines of the input, added with the with the additional sign [Z|W] where W shows how many times in the input we had the occurence of X, and Z shows the "position" of X. 
+For example, for an input such as:
+
+3|78
+4|778
+3|82
+2|78
+3|78
+
+we have the output:
+
+3|78[1 of 2]
+4|778[1 of 1]
+3|82[2 of 2]
+2|78[1 of 1]
+3|78[1 of 2]
+
+The purpose of the program was to be coded in less than 2000 lines of code each, and to use the Containers of each language. Each program should also have a complexity less than nlogn. 
+My implementations have complexity O(n), which means that they accept a very large number of lines as input. 
+
+
