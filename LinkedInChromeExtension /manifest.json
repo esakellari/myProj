@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+
+  "name": "LinkedInExtension",
+  "description": "An extension for LinkedIn",
+  "version": "1.0",
+  "options_page": "options.html",
+
+
+   "background": {
+	    "scripts": ["background.js"],
+	    "persistent": false
+	  },
+  
+  "permissions": [
+	    "activeTab",
+	    "storage"
+	],
+
+  "browser_action": {
+    "default_icon": "icon.png"
+    
+  }
+}
