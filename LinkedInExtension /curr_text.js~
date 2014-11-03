@@ -1,4 +1,0 @@
-
-text = localStorage.getItem('text').replace(/\n\r?/g, '<br />');
-document.write(text);
-

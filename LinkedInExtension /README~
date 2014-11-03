@@ -1,7 +1,0 @@
-A Chrome Extension for LinkedIn which automatically modifies the text in the invitation text box
-when a user asks from another user to create a connection. 
-
-Implemented in Javascript. 
-
-The main body of the project is implemented in content_script.js. The file options.js and options.html 
-contain the code of the Options page for the extension. 
