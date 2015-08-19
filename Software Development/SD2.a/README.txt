@@ -11,13 +11,8 @@ Ergasia 2, Meros 1o:	Ylopoiisi monadas diaxeirisis eggrafwn (RMM)
 Platforma ylopoiisis/Elegmeno se:
 	Linux - GCC 4.2
 	Linux - GCC 4.3
-	Visual Studio 2008 (oxi sxolis)
+	Visual Studio 2008 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	Antwnopoulos Spuridwn	- AM: 1115 2006 00048
-	Petros Pathoulas	- AM: 1115 2006 00182
-	Sakellari Elisavet	- AM: 1115 2006 00152
-
 ____________________________________________________________________________________________________________
 ************************************************************************************************************
 
